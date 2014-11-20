@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+    <title>Journey planner app</title>
+
+    <link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
+    <style>
+        #map-canvas {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .route-leg {
+            border-left: dotted 3px midnightblue;
+            padding: 1em;
+        }
+
+        .route-details {
+            background: #fff;
+            display: inline-block;
+            padding: 1em;
+            margin: 1em;
+            position: fixed;
+            bottom: 150px;
+        }
+    </style>
+</head>
+<body>
+
+
+<div ng-controller="MainController as ctrl">
+    <div layout="column" >
+        <md-content flex>
+            <md-toolbar md-scroll-shrink>
+                <div class="md-toolbar-tools">
+                    <h2><span>Journey Planner App</span></h2>
+                    <!-- fill up the space between left and right area -->
+                    <span flex></span>
+                    <md-button ng-click="ctrl.showEditOptionsMenu($event)"> Set Options</md-button>
+                    <md-button ng-click="ctrl.showAddStopDialog($event)"> Add City</md-button>
+                </div>
+            </md-toolbar>
+        </md-content>
+    </div>
+
+
+    <div layout="column" style="height: 800px;">
+        <div layout-fill id="map-canvas"></div>
+    </div>
+
+    <section class="md-whiteframescra-z1 route-details">
+        <h1>Route Details</h1>
+        <div ng-repeat="route in ctrl.route">
+            <span>{{ route.start }}</span>
+            <button ng-click="ctrl.moveUp(route)" ng-if="!$first">^</button>
+            <button ng-click="ctrl.moveDown(route)"  ng-if="!$last">V</button>
+            <div  class="route-leg">
+                Distance: {{ route.distance }}
+                <br>
+                Duration: {{ route.duration }}
+                <br>
+                <button ng-click="ctrl.removeCity(route)">Remove</button>
+            </div>
+
+            <span>{{ route.end }}</span>
+        </div>
+    </section>
+
+
+</div>
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=GOOGLE_API_KEY"></script>
+
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-aria/angular-aria.js"></script>
+<script src="bower_components/angular-animate/angular-animate.js"></script>
+<script src="bower_components/hammerjs/hammer.js"></script>
+<script src="bower_components/angular-material/angular-material.js"></script>
+<script src="maincontroller.js"></script>
+
+</body>
+</html>

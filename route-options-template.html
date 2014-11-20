@@ -1,0 +1,16 @@
+<md-dialog>
+    <md-content>
+        <form>
+            <h1>Route Options</h1>
+
+            <md-checkbox ng-model="ctrl.routeOptions.avoidHighways" aria-label="avoidHighways">avoid highways</md-checkbox>
+            <md-checkbox ng-model="ctrl.routeOptions.avoidTolls" aria-label="avoidTolls">avoid tolls</md-checkbox>
+            <md-checkbox ng-model="ctrl.routeOptions.optimizeWaypoints" aria-label="optimizeWaypoints">optimize waypoints</md-checkbox>
+            <md-checkbox ng-model="ctrl.routeOptions.provideRouteAlternatives" aria-label="provideRouteAlternatives">provide route alternatives</md-checkbox>
+        </form>
+    </md-content>
+
+    <div class="md-actions">
+        <md-button ng-click="ctrl.closeDialog()"> Close </md-button>
+    </div>
+</md-dialog>
