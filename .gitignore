@@ -1,4 +1,6 @@
 .idea
 bower_components
+node_modules
 build.html
+build.js
 .GOOGLE_API_KEY

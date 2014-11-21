@@ -1,0 +1,38 @@
+<div layout="column">
+  <md-content flex>
+    <md-toolbar md-scroll-shrink>
+      <div class="md-toolbar-tools">
+        <md-button ng-click="mainCtrl.openSideNav()" hide-pc hide-tablet-landscape
+                   class="svg-ic_menu_24px svg-ic_menu_24px-dims"></md-button>
+        <h2><span>Journey Planner App</span></h2>
+        <!-- fill up the space between left and right area -->
+        <span flex></span>
+        <md-button ng-click="mainCtrl.showEditOptionsMenu($event)"> Set Options</md-button>
+        <md-button ng-click="mainCtrl.showAddStopDialog($event)"> Add City</md-button>
+      </div>
+    </md-toolbar>
+  </md-content>
+</div>
+
+<div layout="column" style="height: 800px;">
+  <div layout-fill id="map-canvas"></div>
+</div>
+
+<md-whiteframe class="md-whiteframe-z1 route-details" layout layout-align="center center">
+  <h1>Route Details</h1>
+
+  <div ng-repeat="route in mainCtrl.route">
+    <span>{{ route.start }}</span>
+    <button ng-click="mainCtrl.moveUp(route)" ng-if="!$first">^</button>
+    <button ng-click="mainCtrl.moveDown(route)" ng-if="!$last">V</button>
+    <div class="route-leg">
+      Distance: {{ route.distance }}
+      <br>
+      Duration: {{ route.duration }}
+      <br>
+      <button ng-click="mainCtrl.removeCity(route)">Remove</button>
+    </div>
+
+    <span>{{ route.end }}</span>
+  </div>
+</md-whiteframe>
