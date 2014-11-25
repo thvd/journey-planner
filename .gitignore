@@ -4,3 +4,4 @@ node_modules
 build.html
 build.js
 .GOOGLE_API_KEY
+build

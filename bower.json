@@ -18,6 +18,8 @@
     "angular-material": "~0.5.1",
     "material-design-icons": "~1.0.1",
     "angular-google-maps": "~2.0.9",
-    "angular-ui-router": "~0.2.12"
+    "angular-ui-router": "~0.2.12",
+    "firebase": "~2.0.4",
+    "angularfire": "~0.9.0"
   }
 }

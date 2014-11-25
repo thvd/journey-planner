@@ -16,6 +16,8 @@
   margin: 1em;
   position: fixed;
   bottom: 150px;
+  max-height: 700px;
+  overflow: auto;
 }
 
 .svg-ic_menu_24px-dims {
