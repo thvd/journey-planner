@@ -8,6 +8,9 @@ var size = require('gulp-size');
 var connect = require('gulp-connect');
 var replace = require('gulp-replace');
 var fs = require('fs');
+var htmlreplace = require('gulp-html-replace');
+var minifyCSS = require('gulp-minify-css');
+var gulpif = require('gulp-if');
 
 
 const PROD = 'prod';
@@ -23,50 +26,47 @@ var buildDir = './build/' + ENV;
 
 gulp.task('default', ['connect', 'watch']);
 
-gulp.task('js', ['js:' + ENV], function() {
+gulp.task('js', ['new:js'], function() {
   return gulp.run('file-size:build-js');
 });
 
-gulp.task('js:prod', function () {
-  return gulp.src([
-    'bower_components/angular/angular.min.js',
-    'bower_components/angular-aria/angular-aria.min.js',
-    'bower_components/angular-animate/angular-animate.min.js',
-    'bower_components/hammerjs/hammer.min.js',
-    'bower_components/angular-material/angular-material.min.js',
-    'bower_components/angular-ui-router/release/angular-ui-router.min.js',
-    'bower_components/angular-google-maps/dist/angular-google-maps.min.js',
-    allJsSources
-  ])
+gulp.task('new:js', function() {
+  var sources = [];
+  if (ENV === DEV) {
+    sources = [
+      'bower_components/angular/angular.js',
+      'bower_components/angular-aria/angular-aria.js',
+      'bower_components/angular-animate/angular-animate.js',
+      'bower_components/hammerjs/hammer.js',
+      'bower_components/angular-material/angular-material.js',
+      'bower_components/angular-ui-router/release/angular-ui-router.js',
+      'bower_components/angular-google-maps/dist/angular-google-maps.js',
+      allJsSources
+    ];
+  } else if (ENV === PROD) {
+    sources = [
+      'bower_components/angular/angular.min.js',
+      'bower_components/angular-aria/angular-aria.min.js',
+      'bower_components/angular-animate/angular-animate.min.js',
+      'bower_components/hammerjs/hammer.min.js',
+      'bower_components/angular-material/angular-material.min.js',
+      'bower_components/angular-ui-router/release/angular-ui-router.min.js',
+      'bower_components/angular-google-maps/dist/angular-google-maps.min.js',
+      allJsSources
+    ];
+  } else {
+    gutil.log('should have an valid ENV');
+    return;
+  }
+  return gulp.src(sources)
       .pipe(size({showFiles: true, title: 'js: not minimized'}))
       .pipe(sourcemaps.init({loadMaps: true, debug: true}))
       .pipe(concat('build.js'))
-      .pipe(ngAnnotate())
-      .pipe(uglify())
+      .pipe(gulpif(ENV === PROD, ngAnnotate()))
+      .pipe(gulpif(ENV === PROD, uglify()))
       .pipe(sourcemaps.write('./'))
       .pipe(size({showFiles: false, title: 'js: minimized (including the sourcemap)'}))
       .pipe(gulp.dest(buildDir))
-      .pipe(connect.reload())
-      .on('error', gutil.log);
-});
-
-gulp.task('js:dev', function () {
-  return gulp.src([
-    'bower_components/angular/angular.js',
-    'bower_components/angular-aria/angular-aria.js',
-    'bower_components/angular-animate/angular-animate.js',
-    'bower_components/hammerjs/hammer.js',
-    'bower_components/angular-material/angular-material.js',
-    'bower_components/angular-ui-router/release/angular-ui-router.js',
-    'bower_components/angular-google-maps/dist/angular-google-maps.js',
-    allJsSources
-  ])
-      .pipe(size({showFiles: true, title: 'js: not minimized'}))
-      .pipe(sourcemaps.init({loadMaps: true, debug: true}))
-      .pipe(concat('build.js'))
-      .pipe(sourcemaps.write('./'))
-      .pipe(gulp.dest(buildDir))
-      .pipe(size({showFiles: false, title: 'js: minimized (including the sourcemap)'}))
       .pipe(connect.reload())
       .on('error', gutil.log);
 });
@@ -79,6 +79,10 @@ gulp.task('html', function(cb) {
 
     var stream = gulp.src([allHtmlSources])
         .pipe(replace('GOOGLE_API_KEY', googleApiKey))
+        .pipe(htmlreplace({
+          'css': 'build.css',
+          'js': 'build.js'
+        }))
         .pipe(gulp.dest(buildDir));
 
     stream.on('end', function() {
@@ -108,6 +112,7 @@ gulp.task('css', function() {
       .pipe(sourcemaps.init({loadMaps: true, debug: true}))
       .pipe(concat('build.css'))
       .pipe(sourcemaps.write('./'))
+      .pipe(gulpif(ENV === PROD, minifyCSS()))
       .pipe(gulp.dest(buildDir))
       .pipe(size({showFiles: false, title: 'css: minimized (including the sourcemap)'}))
       .pipe(connect.reload())
