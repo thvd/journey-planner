@@ -1,72 +1,63 @@
-MapController.$inject = ['$scope', '$mdDialog', '$mdSidenav', 'CityDataStoreService'];
-NavigationDrawerController.$inject = ['$scope', '$mdSidenav'];
+/**
+ * @typedef {object} FBCity
+ * @property {string} $id - an ID.
+ * @property {string} name - your name.
+ * @property {number} $priority - priority
+ */
+
+
+
+
+MapController.$inject = ['$scope', '$mdDialog', '$mdSidenav', '$firebase', 'uiGmapGoogleMapApi', 'uiGmapIsReady', 'uiGmapLogger'];
+NavigationDrawerController.$inject = ['$scope', '$mdSidenav', 'uiGmapLogger'];
 RouteOptionsController.$inject = ['$scope', '$mdDialog', 'routeOptions'];
 AddStopController.$inject = ['$scope', '$mdDialog'];
-CityDataStoreService.$inject = [];
-JourneyConfig.$inject = ['$stateProvider', '$urlRouterProvider'];
+RouteDetailsController.$inject = ['$scope', '$firebase'];
+JourneyConfig.$inject = ['$stateProvider', '$urlRouterProvider', 'uiGmapGoogleMapApiProvider'];
 
-angular.module('journey', ['ngMaterial', 'ui.router', 'uiGmapgoogle-maps']);
+angular.module('journey', ['ngMaterial', 'ui.router', 'uiGmapgoogle-maps', 'firebase']);
 angular.module('journey').controller('MapController', MapController);
 angular.module('journey').controller('NavigationDrawerController', NavigationDrawerController);
 angular.module('journey').controller('RouteOptionsController', RouteOptionsController);
 angular.module('journey').controller('AddStopController', AddStopController);
-angular.module('journey').service('CityDataStoreService', CityDataStoreService);
+angular.module('journey').controller('RouteDetailsController', RouteDetailsController);
 angular.module('journey').config(JourneyConfig);
 
 /**
  * @param {ui.router.state.$stateProvider} $stateProvider
  * @param {$urlRouterProvider} $urlRouterProvider
  * @constructor
+ * @param {uiGmapGoogleMapApiProvider} uiGmapGoogleMapApiProvider
  */
-function JourneyConfig($stateProvider, $urlRouterProvider) {
-  //
-  // For any unmatched url, redirect to /state1
+function JourneyConfig($stateProvider, $urlRouterProvider, uiGmapGoogleMapApiProvider) {
+
   $urlRouterProvider.otherwise("/map");
-  //
-  // Now set up the states
+
   $stateProvider
       .state('map', {
-        url: '/map',
-        templateUrl: 'partials/map.html',
+        'url': '/map',
+        'templateUrl': 'partials/map.html',
         'controller': 'MapController',
         'controllerAs': 'mainCtrl'
       })
-      //.state('state1.list', {
-      //  url: "/list",
-      //  templateUrl: "partials/state1.list.html",
-      //  controller: function($scope) {
-      //    $scope.items = ["A", "List", "Of", "Items"];
-      //  }
-      //})
       .state('details', {
-        url: '/details',
-        templateUrl: 'partials/details.html'
-      })
-      /*.state('state2.list', {
-        url: "/list",
-        templateUrl: "partials/state2.list.html",
-        controller: function($scope) {
-          $scope.things = ["A", "Set", "Of", "Things"];
-        }
-      })*/;
-}
+        'url': '/details',
+        'templateUrl': 'partials/details.html',
+        'controller': 'RouteDetailsController',
+        'controllerAs': 'routeDetailsCtrl'
+      });
 
-
-function initialize() {
-  //var mapOptions = {
-  //  center: { lat: -34.397, lng: 150.644},
-  //  zoom: 8
-  //};
-  //var map = new google.maps.Map(document.getElementById('map-canvas'),
-  //  mapOptions);
-
-  angular.element(document).ready(function () {
-    angular.bootstrap(document, ['journey']);
+  uiGmapGoogleMapApiProvider.configure({
+    'v': '3.17'//,
+    //'libraries': 'weather,geometry,visualization',
+    //'key': 'key'
   });
-
 }
 
-google.maps.event.addDomListener(window, 'load', initialize);
+
+angular.element(document).ready(function () {
+  angular.bootstrap(document, ['journey']);
+});
 
 
 arrayMove = function (arr, old_index, new_index) {

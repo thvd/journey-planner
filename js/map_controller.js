@@ -2,21 +2,64 @@
  * @param {object} $scope
  * @param {$mdDialog} $mdDialog
  * @param {$mdSidenav} $mdSidenav
- * @param {CityDataStoreService} CityDataStoreService
+ * @param $firebase
  * @constructor
  */
-function MapController($scope, $mdDialog, $mdSidenav, CityDataStoreService) {
-  /**
-   * @type {Array.<City>}
-   */
-  this.cities = CityDataStoreService.getAll();
+function MapController($scope, $mdDialog, $mdSidenav, $firebase, uiGmapGoogleMapApi, uiGmapIsReady, uiGmapLogger) {
+  uiGmapLogger.doLog = true;
+  uiGmapLogger.currentLevel = 1;
 
-  this.route = [];
 
   /**
-   * @type {Array.<string>}
+   * @type {Firebase}
    */
-  this.alpahbet = 'a-b-c-d-e-f-g-h-i-j-k-l-m-n-o-p-q-r-s-t-u-v-w-x-y-z'.split('-');
+  var ref = new Firebase('https://journey-planner-1.firebaseio.com/journeys');
+  /**
+   * @type {AngularFire|Array}
+   */
+  this._fb = $firebase(ref);
+
+
+  /**
+   * The datastore database to FireBase
+   * @type {Array.<FBCity>}
+   */
+  this._cities = this._fb.$asArray();
+
+
+  /**
+   * Store only the data that is displayed in the list on the maps page
+   * @type {{legs: Array.<DirectionsLeg>}}
+   */
+  this.displayRoute = {
+    'legs': []
+  };
+
+  this.mapSettings = {
+    'mapCenter': {
+      latitude: 30,
+      longitude: -90
+    },
+    'mapZoom': 8
+  };
+
+
+  var isLoaded = false;
+  var map = null;
+  var directionsDisplay = null;
+  var directionsService = null;
+
+  uiGmapIsReady.promise().then(function(instances) {
+    this.routeOptions.travelMode = google.maps.TravelMode.DRIVING;
+    map = _.first(instances).map;
+    console.log('map', map);
+    directionsDisplay = new google.maps.DirectionsRenderer();
+    directionsDisplay.setMap(map);
+    directionsService = new google.maps.DirectionsService();
+    isLoaded = true;
+  }.bind(this));
+
+  this.mapControl = {};
 
   /**
    * @type {google.maps.DirectionsRequest}
@@ -24,8 +67,7 @@ function MapController($scope, $mdDialog, $mdSidenav, CityDataStoreService) {
   this.routeOptions = {
     avoidHighways: false,
     avoidTolls: true,
-    optimizeWaypoints: true,
-    travelMode: google.maps.TravelMode.DRIVING,
+    //optimizeWaypoints: true,
     provideRouteAlternatives: true
   };
 
@@ -49,8 +91,18 @@ function MapController($scope, $mdDialog, $mdSidenav, CityDataStoreService) {
       controller: 'AddStopController',
       controllerAs: 'ctrl'
     }).then(function (routeName) {
-      console.log('routeName: ', routeName);
-      this.addCity(routeName);
+      console.log('this._cities.$add: ', routeName);
+      var lastCity = this._cities[this._cities.length - 1];
+      var priority = 0;
+      if (lastCity) {
+        priority = lastCity.$priority + 1;
+      } else {
+        priority = 0;
+      }
+      this._cities.$add({
+        'name': routeName,
+        '$priority': priority
+      });
     }.bind(this));
   }.bind(this);
 
@@ -61,7 +113,7 @@ function MapController($scope, $mdDialog, $mdSidenav, CityDataStoreService) {
   /**
    * @type {google.maps.MapOptions}
    */
-  var mapOptions = {
+  this.mapOptions = {
     panControl: false,
     zoomControl: false,
     mapTypeControl: false,
@@ -72,38 +124,32 @@ function MapController($scope, $mdDialog, $mdSidenav, CityDataStoreService) {
     center: { lat: -34.397, lng: 150.644},
     zoom: 8
   };
-  /**
-   * @type {google.maps.Map}
-   */
-  var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-
-  var directionsDisplay = new google.maps.DirectionsRenderer();
-  directionsDisplay.setMap(map);
-  var directionsService = new google.maps.DirectionsService();
 
 
   $scope.$watchCollection(function () {
-    return this.cities;
-  }.bind(this), function () {
-    this.updateMapsDirections();
-  }.bind(this));
+    return this._cities;
+  }.bind(this), update.bind(this));
 
   $scope.$watch(function () {
     return this.routeOptions;
-  }.bind(this), function () {
-    this.updateMapsDirections();
-  }.bind(this), true);
+  }.bind(this), update.bind(this), true);
 
+
+  /**
+   */
+  function update() {
+    this.updateMapsDirections();
+  }
 
   this.updateMapsDirections = function () {
-    if (this.cities.length < 1) {
+    if (!isLoaded || this._cities.length < 1) {
       return;
     }
     /**
      * @type {Array.<google.maps.DirectionsWaypoint>}
      */
-    var waypoints = this.cities.filter(function (_, index) {
-      return index !== 0 && index !== (this.cities.length - 1);
+    var waypoints = this._cities.filter(function (_, index) {
+      return index !== 0 && index !== (this._cities.length - 1);
     }.bind(this)).map(function (city) {
       return {
         location: city.name,
@@ -112,71 +158,30 @@ function MapController($scope, $mdDialog, $mdSidenav, CityDataStoreService) {
       };
     });
 
-    var origin = CityDataStoreService.getOrigin();
-    var destination = CityDataStoreService.getDestination();
+    var origin = this._cities[0].name;
+    var destination = this._cities[this._cities.length - 1].name;
 
-    console.log('origin', origin.name);
+    console.log('origin', origin);
     console.log('waypoints', waypoints.map(function (wpoint) {
       return wpoint.location;
     }));
-    console.log('destination', destination.name);
+    console.log('destination', destination);
 
-    this.routeOptions.origin = origin.name;
-    this.routeOptions.destination = destination.name;
+    this.routeOptions.origin = origin;
+    this.routeOptions.destination = destination;
     this.routeOptions.waypoints = waypoints;
 
     directionsService.route(this.routeOptions, function (response, status) {
       if (status === google.maps.DirectionsStatus.OK) {
         directionsDisplay.setDirections(response);
         $scope.$apply(function () {
-          this.cities.forEach(function (city, index) {
-            city.leg = response.routes[0].legs[index];
+
+          this.displayRoute.legs = response.routes[0].legs.map(function(leg) {
+            leg._cities = [leg.start_address, leg.end_address];
+            return leg;
           });
-
-          this.route = [];
-
-          response.routes[0].legs.map(function (leg) {
-            /** @type {DirectionsLeg} leg */
-            this.route.push({
-              'start': leg.start_address,
-              'end': leg.end_address,
-              'distance': leg.distance.text,
-              'duration': leg.duration.text
-            });
-          }.bind(this));
-
-          console.log(this);
         }.bind(this));
       }
     }.bind(this));
-  }.bind(this);
-
-
-  /**
-   * @param {string} cityName
-   */
-  this.addCity = function (cityName) {
-    this.cities.splice(this.cities.length - 1, 0, new City(cityName, null));
-  }.bind(this);
-
-  /**
-   * @param {City} city
-   */
-  this.removeCity = function (city) {
-    CityDataStoreService.remove(city);
-  }.bind(this);
-
-  /**
-   * @param {City} city
-   */
-  this.moveUp = function (city) {
-    CityDataStoreService.moveUp(city);
-  }.bind(this);
-
-  /**
-   * @param {City} city
-   */
-  this.moveDown = function (city) {
-    CityDataStoreService.moveDown(city);
   }.bind(this);
 }

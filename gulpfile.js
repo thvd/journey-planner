@@ -11,6 +11,7 @@ var fs = require('fs');
 var htmlreplace = require('gulp-html-replace');
 var minifyCSS = require('gulp-minify-css');
 var gulpif = require('gulp-if');
+//var rename = require('gulp-rename');
 
 
 const PROD = 'prod';
@@ -26,14 +27,15 @@ var buildDir = './build/' + ENV;
 
 gulp.task('default', ['connect', 'watch']);
 
-gulp.task('js', ['new:js'], function() {
+gulp.task('js', ['new:js'], function () {
   return gulp.run('file-size:build-js');
 });
 
-gulp.task('new:js', function() {
+gulp.task('new:js', function () {
   var sources = [];
   if (ENV === DEV) {
     sources = [
+      'bower_components/lodash/dist/lodash.js',
       'bower_components/angular/angular.js',
       'bower_components/angular-aria/angular-aria.js',
       'bower_components/angular-animate/angular-animate.js',
@@ -41,10 +43,13 @@ gulp.task('new:js', function() {
       'bower_components/angular-material/angular-material.js',
       'bower_components/angular-ui-router/release/angular-ui-router.js',
       'bower_components/angular-google-maps/dist/angular-google-maps.js',
+      'bower_components/firebase/firebase-debug.js',
+      'bower_components/angularfire/dist/angularfire.js',
       allJsSources
     ];
   } else if (ENV === PROD) {
     sources = [
+      'bower_components/lodash/dist/lodash.min.js',
       'bower_components/angular/angular.min.js',
       'bower_components/angular-aria/angular-aria.min.js',
       'bower_components/angular-animate/angular-animate.min.js',
@@ -52,16 +57,18 @@ gulp.task('new:js', function() {
       'bower_components/angular-material/angular-material.min.js',
       'bower_components/angular-ui-router/release/angular-ui-router.min.js',
       'bower_components/angular-google-maps/dist/angular-google-maps.min.js',
+      'bower_components/firebase/firebase.js',
+      'bower_components/angularfire/dist/angularfire.min.js',
       allJsSources
     ];
   } else {
     gutil.log('should have an valid ENV');
     return;
   }
-  return gulp.src(sources)
+  return gulp.src(sources, {base: '.'})
       .pipe(size({showFiles: true, title: 'js: not minimized'}))
       .pipe(sourcemaps.init({loadMaps: true, debug: true}))
-      .pipe(concat('build.js'))
+      .pipe(gulpif(ENV === PROD, concat('build.js')))
       .pipe(gulpif(ENV === PROD, ngAnnotate()))
       .pipe(gulpif(ENV === PROD, uglify()))
       .pipe(sourcemaps.write('./'))
@@ -71,7 +78,7 @@ gulp.task('new:js', function() {
       .on('error', gutil.log);
 });
 
-gulp.task('html', function(cb) {
+gulp.task('html', function (cb) {
   fs.readFile('./.GOOGLE_API_KEY', 'utf8', function (err, googleApiKey) {
     if (err) {
       return console.log(err);
@@ -79,34 +86,38 @@ gulp.task('html', function(cb) {
 
     var stream = gulp.src([allHtmlSources])
         .pipe(replace('GOOGLE_API_KEY', googleApiKey))
-        .pipe(htmlreplace({
+        .pipe(gulpif(ENV === PROD, htmlreplace({
           'css': 'build.css',
           'js': 'build.js'
-        }))
+        }), htmlreplace({
+          'css': 'build.css'
+        }, {
+          'keepUnassigned': true
+        })))
         .pipe(gulp.dest(buildDir));
 
-    stream.on('end', function() {
+    stream.on('end', function () {
       cb();
     });
-    stream.on('error', function(err) {
+    stream.on('error', function (err) {
       gutil.log('error', err);
       cb(err);
     });
   });
 });
 
-gulp.task('html:partials', function() {
+gulp.task('html:partials', function () {
   return gulp.src([allPartialHtmlSources])
       .pipe(gulp.dest(buildDir + '/partials'))
       .on('error', gutil.log);
 });
 
-gulp.task('css', function() {
+gulp.task('css', function () {
   return gulp.src([
-      'bower_components/angular-material/angular-material.css',
-      'bower_components/material-design-icons/sprites/svg-sprite/svg-sprite-navigation.css',
-      'bower_components/material-design-icons/sprites/svg-sprite/svg-sprite-maps.css',
-      allCssSources
+    'bower_components/angular-material/angular-material.css',
+    'bower_components/material-design-icons/sprites/svg-sprite/svg-sprite-navigation.css',
+    'bower_components/material-design-icons/sprites/svg-sprite/svg-sprite-maps.css',
+    allCssSources
   ])
       .pipe(size({showFiles: true, title: 'css: not minimized'}))
       .pipe(sourcemaps.init({loadMaps: true, debug: true}))
@@ -119,16 +130,16 @@ gulp.task('css', function() {
       .on('error', gutil.log);
 });
 
-gulp.task('connect', function() {
+gulp.task('connect', function () {
   connect.server({
     root: buildDir,
     livereload: true
   });
 });
 
-gulp.task('copy:angular-material-svg-sprites', function() {
+gulp.task('copy:angular-material-svg-sprites', function () {
   return gulp.src([
-      'bower_components/material-design-icons/sprites/svg-sprite/*.svg'
+    'bower_components/material-design-icons/sprites/svg-sprite/*.svg'
   ])
       .pipe(gulp.dest(buildDir))
       .on('error', gutil.log);
@@ -136,31 +147,28 @@ gulp.task('copy:angular-material-svg-sprites', function() {
 
 gulp.task('build', ['js', 'html', 'html:partials', 'css', 'copy:angular-material-svg-sprites']);
 
-gulp.task('watch', ['build'], function() {
+gulp.task('watch', ['build'], function () {
   gulp.watch([allJsSources], ['js']);
   gulp.watch([allCssSources], ['css']);
   gulp.watch([allHtmlSources], ['html']);
   gulp.watch([allPartialHtmlSources], ['html:partials']);
 });
 
-gulp.task('file-size:build-js', function() {
+gulp.task('file-size:build-js', function () {
   return gulp.src([
-      buildDir + '/build.js'
+    buildDir + '/build.js'
   ])
       .pipe(size({showFiles: false, title: 'js: minimized (without the sourcemap)'}))
       .on('error', gutil.log);
 });
 
-gulp.task('file-size:build-css', function() {
+gulp.task('file-size:build-css', function () {
   return gulp.src([
     buildDir + '/build.css'
   ])
       .pipe(size({showFiles: false, title: 'css: minimized (without the sourcemap)'}))
       .on('error', gutil.log);
 });
-
-
-
 
 
 function getEnv() {

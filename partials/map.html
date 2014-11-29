@@ -3,36 +3,47 @@
     <md-toolbar md-scroll-shrink>
       <div class="md-toolbar-tools">
         <md-button ng-click="mainCtrl.openSideNav()" hide-pc hide-tablet-landscape
-                   class="svg-ic_menu_24px svg-ic_menu_24px-dims"></md-button>
+                   class="svg-ic_menu_24px svg-ic_menu_24px-dims" aria-label="Open nav menu"></md-button>
         <h2><span>Journey Planner App</span></h2>
         <!-- fill up the space between left and right area -->
         <span flex></span>
-        <md-button ng-click="mainCtrl.showEditOptionsMenu($event)"> Set Options</md-button>
-        <md-button ng-click="mainCtrl.showAddStopDialog($event)"> Add City</md-button>
+        <md-button ng-click="mainCtrl.showEditOptionsMenu($event)" aria-label="Set Options"> Set Options</md-button>
+        <md-button ng-click="mainCtrl.showAddStopDialog($event)" aria-label="Add City"> Add City</md-button>
       </div>
     </md-toolbar>
   </md-content>
 </div>
 
-<div layout="column" style="height: 800px;">
-  <div layout-fill id="map-canvas"></div>
+<div layout="column" style="height: 800px; position: relative; /*height: 100%;*/ width: 100%; margin: 0px;">
+  <!--<div layout-fill id="map-canvas"></div>-->
+  <!--center="map.center" zoom="map.zoom"-->
+  <ui-gmap-google-map options="mainCtrl.mapOptions" control="mainCtrl.mapControl" center="mainCtrl.mapSettings.mapCenter" zoom="mainCtrl.mapSettings.mapZoom" ></ui-gmap-google-map>
 </div>
 
 <md-whiteframe class="md-whiteframe-z1 route-details" layout layout-align="center center">
   <h1>Route Details</h1>
 
-  <div ng-repeat="route in mainCtrl.route">
-    <span>{{ route.start }}</span>
-    <button ng-click="mainCtrl.moveUp(route)" ng-if="!$first">^</button>
-    <button ng-click="mainCtrl.moveDown(route)" ng-if="!$last">V</button>
+  <div ng-repeat="leg in mainCtrl.displayRoute.legs">
+    <span>{{ leg.start_address }}</span>
+
     <div class="route-leg">
-      Distance: {{ route.distance }}
+      Distance: {{ leg.distance.text }}
       <br>
-      Duration: {{ route.duration }}
+      Duration: {{ leg.duration.text }}
       <br>
-      <button ng-click="mainCtrl.removeCity(route)">Remove</button>
     </div>
 
-    <span>{{ route.end }}</span>
+    <span>{{ leg.end_address }}</span>
   </div>
 </md-whiteframe>
+<style>
+  /*.angular-google-map-container { height: 100%; }*/
+
+  .angular-google-map-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+  }
+</style>
