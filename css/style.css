@@ -1,8 +1,8 @@
-#map-canvas {
+/*#map-canvas {
   height: 100%;
   margin: 0;
   padding: 0;
-}
+}*/
 
 .route-leg {
   border-left: dotted 3px midnightblue;
@@ -11,11 +11,12 @@
 
 .route-details {
   background-color: rgba(255,255,255, .8);
+  /*background-color: rgb(255,255,255);*/
   display: inline-block;
   padding: 1em;
   margin: 1em;
   position: fixed;
-  bottom: 150px;
+  bottom: 0;
   max-height: 700px;
   overflow: auto;
 }
@@ -33,4 +34,32 @@
 .svg-ic_map_24px-dims {
   width: 24px;
   height: 24px;
+}
+
+
+.hotel {
+  background-color: #E4FFF1;
+}
+
+
+
+md-item.active md-item-content {
+  background-color: rgb(0, 101, 105);
+}
+
+
+
+.add-city-button {
+  position: absolute;
+  margin: 2em;
+  bottom: 0;
+  right: 0;
+}
+
+.angular-google-map-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
 }

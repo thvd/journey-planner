@@ -17,14 +17,14 @@ function MapController($scope, $mdDialog, $mdSidenav, $firebase, uiGmapGoogleMap
   /**
    * @type {AngularFire|Array}
    */
-  this._fb = $firebase(ref);
+  var _fb = $firebase(ref);
 
 
   /**
    * The datastore database to FireBase
    * @type {Array.<FBCity>}
    */
-  this._cities = this._fb.$asArray();
+  this._cities = _fb.$asArray();
 
 
   /**
@@ -37,8 +37,8 @@ function MapController($scope, $mdDialog, $mdSidenav, $firebase, uiGmapGoogleMap
 
   this.mapSettings = {
     'mapCenter': {
-      latitude: 30,
-      longitude: -90
+      'latitude': 30,
+      'longitude': -90
     },
     'mapZoom': 8
   };
@@ -106,9 +106,9 @@ function MapController($scope, $mdDialog, $mdSidenav, $firebase, uiGmapGoogleMap
     }.bind(this));
   }.bind(this);
 
-  this.openSideNav = function () {
-    $mdSidenav('left').open();
-  }.bind(this);
+  // this.openSideNav = function () {
+  //   $mdSidenav('left').open();
+  // }.bind(this);
 
   /**
    * @type {google.maps.MapOptions}

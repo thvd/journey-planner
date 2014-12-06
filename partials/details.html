@@ -1,29 +1,53 @@
 <script>
-  /**
-   * @type {RouteDetailsController} routeDetailsCtrl
-   */
+  /** @typedef {RouteDetailsController} routeDetailsCtrl */
 </script>
+
 <md-content>
-  <h1>Welcom to the details</h1>
+  <!--<h1>Welcome to the details</h1>-->
 
+  <div layout="column">
+    <md-content flex>
+      <md-toolbar md-scroll-shrink>
+        <div class="md-toolbar-tools">
+          <md-button ng-click="routeDetailsCtrl.openNav()" hide-gt-sm
+                     class="svg-ic_menu_24px svg-ic_menu_24px-dims" aria-label="Open nav menu"></md-button>
+          <h2> City Details </h2>
+          <!--<h2><span>{{ cityDetailCtrl.hotels.length }} hotels found. Check them out below!</span></h2>-->
+          <!-- fill up the space between left and right area -->
+          <span flex></span>
 
-  <md-list>
-    <md-item ng-repeat="city in routeDetailsCtrl._cities">
-      <md-item-content>
-        <div class="md-tile-left">
-          <!--<img ng-src="{{item.face}}" class="face" alt="{{item.who}}">-->
+          <!--<md-button ng-click="mainCtrl.showEditOptionsMenu($event)" aria-label="Set Options"> Set Options</md-button>-->
         </div>
-        <div class="md-tile-content">
-          <h3>{{ city.name }}</h3>
-          <!--<h4>{{item.who}}</h4>-->
-          <!--<p>-->
-            <!--{{item.notes}}-->
-          <!--</p>-->
-          <md-button aria-label="Up" ng-click="routeDetailsCtrl.moveUp(city)" ng-hide="$first">^</md-button>
-          <md-button aria-label="Down" ng-click="routeDetailsCtrl.moveDown(city)" ng-hide="$last">v</md-button>
-        </div>
-      </md-item-content>
-    </md-item>
+      </md-toolbar>
+    </md-content>
+  </div>
 
-  </md-list>
+
+  <div layout="row">
+    <div>
+      <md-list>
+        <md-item ng-repeat="city in routeDetailsCtrl._cities" ui-sref-active="active">
+          <md-item-content ui-sref="cities.detail({cityId: city.$id})">
+            <div class="md-tile-left">
+              <!--<img ng-src="{{item.face}}" class="face" alt="{{item.who}}">-->
+            </div>
+            <div class="md-tile-content">
+              <h3>{{ city.name }}</h3>
+              <!--<h4>{{item.who}}</h4>-->
+              <!--<p>-->
+              <!--{{item.notes}}-->
+              <!--</p>-->
+              <md-button aria-label="Up" ng-click="routeDetailsCtrl.moveUp(city)" ng-hide="$first">^</md-button>
+              <md-button aria-label="Down" ng-click="routeDetailsCtrl.moveDown(city)" ng-hide="$last">v</md-button>
+            </div>
+          </md-item-content>
+        </md-item>
+      </md-list>
+    </div>
+    <div ui-view>
+
+    </div>
+  </div>
+
+
 </md-content>

@@ -7,21 +7,18 @@
 
 
 
-
-MapController.$inject = ['$scope', '$mdDialog', '$mdSidenav', '$firebase', 'uiGmapGoogleMapApi', 'uiGmapIsReady', 'uiGmapLogger'];
-NavigationDrawerController.$inject = ['$scope', '$mdSidenav', 'uiGmapLogger'];
-RouteOptionsController.$inject = ['$scope', '$mdDialog', 'routeOptions'];
-AddStopController.$inject = ['$scope', '$mdDialog'];
-RouteDetailsController.$inject = ['$scope', '$firebase'];
-JourneyConfig.$inject = ['$stateProvider', '$urlRouterProvider', 'uiGmapGoogleMapApiProvider'];
-
 angular.module('journey', ['ngMaterial', 'ui.router', 'uiGmapgoogle-maps', 'firebase']);
+angular.module('journey').config(JourneyConfig);
+
+angular.module('journey').service('GooglePlacesService', GooglePlacesService);
+
 angular.module('journey').controller('MapController', MapController);
 angular.module('journey').controller('NavigationDrawerController', NavigationDrawerController);
 angular.module('journey').controller('RouteOptionsController', RouteOptionsController);
 angular.module('journey').controller('AddStopController', AddStopController);
 angular.module('journey').controller('RouteDetailsController', RouteDetailsController);
-angular.module('journey').config(JourneyConfig);
+angular.module('journey').controller('CityDetailController', CityDetailController);
+
 
 /**
  * @param {ui.router.state.$stateProvider} $stateProvider
@@ -40,17 +37,23 @@ function JourneyConfig($stateProvider, $urlRouterProvider, uiGmapGoogleMapApiPro
         'controller': 'MapController',
         'controllerAs': 'mainCtrl'
       })
-      .state('details', {
-        'url': '/details',
+      .state('cities', {
+        'url': '/cities',
         'templateUrl': 'partials/details.html',
         'controller': 'RouteDetailsController',
         'controllerAs': 'routeDetailsCtrl'
+      })
+      .state('cities.detail', {
+        'url': '/:cityId',
+        'templateUrl': 'partials/city-details.html',
+        'controller': 'CityDetailController',
+        'controllerAs': 'cityDetailCtrl'
       });
 
   uiGmapGoogleMapApiProvider.configure({
-    'v': '3.17'//,
-    //'libraries': 'weather,geometry,visualization',
-    //'key': 'key'
+    'v': '3.17',
+    'libraries': 'places', //'weather,geometry,visualization',
+    'key': 'GOOGLE_API_KEY'
   });
 }
 

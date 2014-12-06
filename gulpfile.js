@@ -11,7 +11,8 @@ var fs = require('fs');
 var htmlreplace = require('gulp-html-replace');
 var minifyCSS = require('gulp-minify-css');
 var gulpif = require('gulp-if');
-//var rename = require('gulp-rename');
+
+var config = require('./.config.json');
 
 
 const PROD = 'prod';
@@ -68,6 +69,7 @@ gulp.task('new:js', function () {
   return gulp.src(sources, {base: '.'})
       .pipe(size({showFiles: true, title: 'js: not minimized'}))
       .pipe(sourcemaps.init({loadMaps: true, debug: true}))
+      .pipe(replace('GOOGLE_API_KEY', config.google_api_key))
       .pipe(gulpif(ENV === PROD, concat('build.js')))
       .pipe(gulpif(ENV === PROD, ngAnnotate()))
       .pipe(gulpif(ENV === PROD, uglify()))
@@ -79,36 +81,23 @@ gulp.task('new:js', function () {
 });
 
 gulp.task('html', function (cb) {
-  fs.readFile('./.GOOGLE_API_KEY', 'utf8', function (err, googleApiKey) {
-    if (err) {
-      return console.log(err);
-    }
-
-    var stream = gulp.src([allHtmlSources])
-        .pipe(replace('GOOGLE_API_KEY', googleApiKey))
-        .pipe(gulpif(ENV === PROD, htmlreplace({
-          'css': 'build.css',
-          'js': 'build.js'
-        }), htmlreplace({
-          'css': 'build.css'
-        }, {
-          'keepUnassigned': true
-        })))
-        .pipe(gulp.dest(buildDir));
-
-    stream.on('end', function () {
-      cb();
-    });
-    stream.on('error', function (err) {
-      gutil.log('error', err);
-      cb(err);
-    });
-  });
+  return gulp.src([allHtmlSources])
+      .pipe(replace('GOOGLE_API_KEY', config.google_api_key))
+      .pipe(gulpif(ENV === PROD, htmlreplace({
+        'css': 'build.css',
+        'js': 'build.js'
+      }), htmlreplace({
+        'css': 'build.css'
+      }, {
+        'keepUnassigned': true
+      })))
+      .pipe(gulp.dest(buildDir));
 });
 
 gulp.task('html:partials', function () {
   return gulp.src([allPartialHtmlSources])
       .pipe(gulp.dest(buildDir + '/partials'))
+      .pipe(connect.reload())
       .on('error', gutil.log);
 });
 
@@ -139,7 +128,8 @@ gulp.task('connect', function () {
 
 gulp.task('copy:angular-material-svg-sprites', function () {
   return gulp.src([
-    'bower_components/material-design-icons/sprites/svg-sprite/*.svg'
+    'bower_components/material-design-icons/sprites/svg-sprite/*.svg',
+    'bower_components/material-design-icons/content/svg/production/*.svg'
   ])
       .pipe(gulp.dest(buildDir))
       .on('error', gutil.log);

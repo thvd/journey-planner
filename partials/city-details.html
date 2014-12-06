@@ -1,0 +1,31 @@
+<script>
+  /** @typedef {CityDetailController} cityDetailCtrl */
+</script>
+
+{{ cityDetailCtrl.hotels.length }} hotels found. Check them out below!
+
+<md-switch ng-model="cityDetailCtrl.showHotelsWithoutRating" aria-label="Show hotels without rating">
+  Show hotels without rating ({{ cityDetailCtrl.hotelsWithoutRatingCount }})
+</md-switch>
+
+<md-card
+    ng-repeat="hotel in cityDetailCtrl.hotels | filter: cityDetailCtrl.filterWithOrWithoutRating | orderBy: '-rating'"
+    class="hotel">
+  <h1> {{ hotel.name }} </h1>
+  <p> Rating: {{ hotel.rating }} </p>
+  <p ng-show="hotel.website"> Website: <a ng-href="{{ hotel.website }}">{{ hotel.name }}</a></p>
+  <p><a ng-href="http://www.tripadvisor.nl/{{ hotel.name }}.html" target="_blank">Trip Advisor</a></p>
+
+  <div>
+    <div ng-repeat="photo in hotel.photos">
+      <img ng-src="{{ photo }}" alt=""/>
+    </div>
+  </div>
+
+  <div>
+    <div ng-repeat="review in hotel.reviews">
+      <p>{{ review.author_name }}</p>
+      <p>{{ review.text }}</p>
+    </div>
+  </div>
+</md-card>

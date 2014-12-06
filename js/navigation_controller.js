@@ -3,4 +3,8 @@ function NavigationDrawerController($scope, $mdSidenav, uiGmapLogger) {
   this.close = function () {
     $mdSidenav('left').close();
   }.bind(this);
+
+  this.open = function () {
+    $mdSidenav('left').open();
+  };
 }

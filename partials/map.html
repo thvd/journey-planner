@@ -2,28 +2,40 @@
   <md-content flex>
     <md-toolbar md-scroll-shrink>
       <div class="md-toolbar-tools">
-        <md-button ng-click="mainCtrl.openSideNav()" hide-pc hide-tablet-landscape
+        <md-button ng-click="mainCtrl.openSideNav()" hide-gt-sm
                    class="svg-ic_menu_24px svg-ic_menu_24px-dims" aria-label="Open nav menu"></md-button>
-        <h2><span>Journey Planner App</span></h2>
+        <h2>Journey Planner App</h2>
         <!-- fill up the space between left and right area -->
         <span flex></span>
+
         <md-button ng-click="mainCtrl.showEditOptionsMenu($event)" aria-label="Set Options"> Set Options</md-button>
-        <md-button ng-click="mainCtrl.showAddStopDialog($event)" aria-label="Add City"> Add City</md-button>
       </div>
     </md-toolbar>
   </md-content>
 </div>
 
-<div layout="column" style="height: 800px; position: relative; /*height: 100%;*/ width: 100%; margin: 0px;">
-  <!--<div layout-fill id="map-canvas"></div>-->
-  <!--center="map.center" zoom="map.zoom"-->
-  <ui-gmap-google-map options="mainCtrl.mapOptions" control="mainCtrl.mapControl" center="mainCtrl.mapSettings.mapCenter" zoom="mainCtrl.mapSettings.mapZoom" ></ui-gmap-google-map>
+<div layout="column" style="">
+  <!--height: 800px; position: relative; /*height: 100%;*/ width: 100%; margin: 0px;-->
+  <ui-gmap-google-map options="mainCtrl.mapOptions" control="mainCtrl.mapControl"
+                      center="mainCtrl.mapSettings.mapCenter" zoom="mainCtrl.mapSettings.mapZoom" ></ui-gmap-google-map>
+
+  <md-button ng-click="mainCtrl.showAddStopDialog($event)" class="md-fab add-city-button md-warn" md-warn
+             aria-label="Add City">
+    <md-icon icon="ic_add_24px.svg" style="width: 24px; height: 24px;">
+    </md-icon>
+    <md-tooltip>
+      Add City
+    </md-tooltip>
+  </md-button>
 </div>
 
 <md-whiteframe class="md-whiteframe-z1 route-details" layout layout-align="center center">
   <h1>Route Details</h1>
 
-  <div ng-repeat="leg in mainCtrl.displayRoute.legs">
+  <md-button ng-show="mainCtrl.isRouteDetailsMaximized" ng-click="mainCtrl.isRouteDetailsMaximized = !mainCtrl.isRouteDetailsMaximized">Minimize</md-button>
+  <md-button ng-show="!mainCtrl.isRouteDetailsMaximized" ng-click="mainCtrl.isRouteDetailsMaximized = !mainCtrl.isRouteDetailsMaximized">Maximize</md-button>
+
+  <div ng-repeat="leg in mainCtrl.displayRoute.legs" ng-show="mainCtrl.isRouteDetailsMaximized">
     <span>{{ leg.start_address }}</span>
 
     <div class="route-leg">
@@ -36,14 +48,3 @@
     <span>{{ leg.end_address }}</span>
   </div>
 </md-whiteframe>
-<style>
-  /*.angular-google-map-container { height: 100%; }*/
-
-  .angular-google-map-container {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
-  }
-</style>

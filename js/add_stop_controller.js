@@ -8,4 +8,8 @@ function AddStopController($scope, $mdDialog) {
     console.log('t:', this.stopName);
     $mdDialog.hide(this.stopName);
   }.bind(this);
+
+  this.cancelDialog = function() {
+    $mdDialog.cancel(this.stopName);
+  };
 }

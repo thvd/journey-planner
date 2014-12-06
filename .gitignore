@@ -5,3 +5,4 @@ build.html
 build.js
 .GOOGLE_API_KEY
 build
+.config.json

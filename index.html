@@ -18,39 +18,31 @@
 <div layout="column" layout-fill>
   <section layout="row" flex>
     <div ng-controller="NavigationDrawerController as navCtrl">
-      <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" component-id="left"
-                  md-is-locked-open="$media('md')" is-locked-open="$media('md')">
+      <md-sidenav class="md-whiteframe-z2 md-sidenav-left" md-component-id="left" md-is-locked-open="$media('sm')">
         <md-toolbar class="md-theme-indigo">
           <div class="md-toolbar-tools">
-            <md-button hide-pc hide-tablet-landscape ng-click="navCtrl.close()" class="md-primary"
-                       class="svg-ic_arrow_back_24px svg-ic_arrow_back_24px-dims" aria-label="Close nav menu"></md-button>
-            <h1 class="">My Sidenav Left</h1>
+            <md-button hide-gt-sm ng-click="navCtrl.close()"
+                       class="md-primary svg-ic_arrow_back_24px svg-ic_arrow_back_24px-dims"
+                       aria-label="Close nav menu"></md-button>
+            <h1>My Sidenav Left</h1>
           </div>
         </md-toolbar>
         <md-content class="md-padding">
           <md-list>
             <md-item>
-              <!--<md-button block aria-label="Map">-->
               <md-item-content>
-
-                <div class="md-tile-left svg-ic_map_24px svg-ic_map_24px-dims">
-                  <!--<img ng-src="{{item.face}}" class="face" alt="{{item.who}}">-->
-                </div>
+                <div class="md-tile-left svg-ic_map_24px svg-ic_map_24px-dims"></div>
                 <div class="md-tile-content">
                   <a ui-sref="map"><h3>Map</h3></a>
                 </div>
-
               </md-item-content>
-              <!--</md-button>-->
             </md-item>
             <md-item>
               <md-item-content>
                 <md-button block aria-label="Details">
-                  <div class="md-tile-left svg-ic_map_24px svg-ic_map_24px-dims">
-                    <!--<img ng-src="{{item.face}}" class="face" alt="{{item.who}}">-->
-                  </div>
+                  <div class="md-tile-left svg-ic_map_24px svg-ic_map_24px-dims"></div>
                   <div class="md-tile-content">
-                    <a ui-sref="details"><h3>Details</h3></a>
+                    <a ui-sref="cities"><h3>Details</h3></a>
                   </div>
                 </md-button>
               </md-item-content>
@@ -61,7 +53,7 @@
       </md-sidenav>
     </div>
 
-    <md-content flex ui-view></md-content>
+    <md-content flex ui-view layout-fill></md-content>
   </section>
 </div>
 
@@ -83,12 +75,12 @@
 <script src="bower_components/angularfire/dist/angularfire.js"></script>
 
 <script src="js/add_stop_controller.js"></script>
-<!--<script src="js/city.js"></script>-->
-<!--<script src="js/city_data_store_service.js"></script>-->
 <script src="js/map_controller.js"></script>
 <script src="js/navigation_controller.js"></script>
 <script src="js/route_options_controller.js"></script>
 <script src="js/route_details_controller.js"></script>
+<script src="js/CityDetailController.js"></script>
+<script src="js/GooglePlacesService.js"></script>
 <script src="js/app.js"></script>
 <!-- endbuild-->
 
