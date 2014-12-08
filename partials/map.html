@@ -14,8 +14,8 @@
   </md-content>
 </div>
 
-<div layout="column" style="">
-  <!--height: 800px; position: relative; /*height: 100%;*/ width: 100%; margin: 0px;-->
+<div layout="column" ng-if="mainCtrl.showMap">
+
   <ui-gmap-google-map options="mainCtrl.mapOptions" control="mainCtrl.mapControl"
                       center="mainCtrl.mapSettings.mapCenter" zoom="mainCtrl.mapSettings.mapZoom" ></ui-gmap-google-map>
 
@@ -32,8 +32,10 @@
 <md-whiteframe class="md-whiteframe-z1 route-details" layout layout-align="center center">
   <h1>Route Details</h1>
 
-  <md-button ng-show="mainCtrl.isRouteDetailsMaximized" ng-click="mainCtrl.isRouteDetailsMaximized = !mainCtrl.isRouteDetailsMaximized">Minimize</md-button>
-  <md-button ng-show="!mainCtrl.isRouteDetailsMaximized" ng-click="mainCtrl.isRouteDetailsMaximized = !mainCtrl.isRouteDetailsMaximized">Maximize</md-button>
+  <md-button ng-show="mainCtrl.isRouteDetailsMaximized"
+             ng-click="mainCtrl.isRouteDetailsMaximized = !mainCtrl.isRouteDetailsMaximized">Minimize</md-button>
+  <md-button ng-show="!mainCtrl.isRouteDetailsMaximized"
+             ng-click="mainCtrl.isRouteDetailsMaximized = !mainCtrl.isRouteDetailsMaximized">Maximize</md-button>
 
   <div ng-repeat="leg in mainCtrl.displayRoute.legs" ng-show="mainCtrl.isRouteDetailsMaximized">
     <span>{{ leg.start_address }}</span>

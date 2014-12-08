@@ -5,7 +5,7 @@
  * @param $firebase
  * @constructor
  */
-function MapController($scope, $mdDialog, $mdSidenav, $firebase, uiGmapGoogleMapApi, uiGmapIsReady, uiGmapLogger) {
+function MapController($scope, $mdDialog, $mdSidenav, $firebase, uiGmapGoogleMapApi, uiGmapIsReady, uiGmapLogger, $timeout) {
   uiGmapLogger.doLog = true;
   uiGmapLogger.currentLevel = 1;
 
@@ -25,6 +25,19 @@ function MapController($scope, $mdDialog, $mdSidenav, $firebase, uiGmapGoogleMap
    * @type {Array.<FBCity>}
    */
   this._cities = _fb.$asArray();
+
+  /**
+   * @type {boolean}
+   */
+  this.showMap = false;
+
+  /*
+   * Fix the problem when switching between views, and when you come back on the map view, you see the Google Map
+   * showed only on the left half of the page.
+   */
+  $timeout(function() {
+    this.showMap = true;
+  }.bind(this), 1);
 
 
   /**
