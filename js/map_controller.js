@@ -5,7 +5,7 @@
  * @param $firebase
  * @constructor
  */
-function MapController($scope, $mdDialog, $mdSidenav, $firebase, uiGmapGoogleMapApi, uiGmapIsReady, uiGmapLogger, $timeout) {
+function MapController($scope, $mdDialog, $mdSidenav, $firebase, uiGmapGoogleMapApi, uiGmapIsReady, uiGmapLogger, $timeout, $mdToast) {
   uiGmapLogger.doLog = true;
   uiGmapLogger.currentLevel = 1;
 
@@ -115,6 +115,8 @@ function MapController($scope, $mdDialog, $mdSidenav, $firebase, uiGmapGoogleMap
       this._cities.$add({
         'name': routeName,
         '$priority': priority
+      }).then(function(ref) {
+        $mdToast.show($mdToast.simple().content('Added ' + routeName + ' to your route'));
       });
     }.bind(this));
   }.bind(this);
