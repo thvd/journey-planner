@@ -121,9 +121,9 @@ function MapController($scope, $mdDialog, $mdSidenav, $firebase, uiGmapGoogleMap
     }.bind(this));
   }.bind(this);
 
-  // this.openSideNav = function () {
-  //   $mdSidenav('left').open();
-  // }.bind(this);
+  this.openSideNav = function () {
+    $mdSidenav('left').open();
+  }.bind(this);
 
   /**
    * @type {google.maps.MapOptions}
