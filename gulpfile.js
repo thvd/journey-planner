@@ -106,6 +106,7 @@ gulp.task('css', function () {
     'bower_components/angular-material/angular-material.css',
     'bower_components/material-design-icons/sprites/svg-sprite/svg-sprite-navigation.css',
     'bower_components/material-design-icons/sprites/svg-sprite/svg-sprite-maps.css',
+    'bower_components/material-design-icons/sprites/svg-sprite/svg-sprite-action.css',
     allCssSources
   ])
       .pipe(size({showFiles: true, title: 'css: not minimized'}))
@@ -129,7 +130,8 @@ gulp.task('connect', function () {
 gulp.task('copy:angular-material-svg-sprites', function () {
   return gulp.src([
     'bower_components/material-design-icons/sprites/svg-sprite/*.svg',
-    'bower_components/material-design-icons/content/svg/production/*.svg'
+    'bower_components/material-design-icons/content/svg/production/*.svg',
+    'bower_components/material-design-icons/action/svg/production/*.svg'
   ])
       .pipe(gulp.dest(buildDir))
       .on('error', gutil.log);

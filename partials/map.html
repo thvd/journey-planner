@@ -8,7 +8,12 @@
         <!-- fill up the space between left and right area -->
         <span flex></span>
 
-        <md-button ng-click="mainCtrl.showEditOptionsMenu($event)" aria-label="Set Options"> Set Options</md-button>
+        <md-button ng-click="mainCtrl.showEditOptionsMenu($event)" aria-label="Set Options">
+          <md-icon icon="ic_settings_24px.svg" style="width: 24px; height: 24px;"></md-icon>
+          <md-tooltip>
+            Set Options
+          </md-tooltip>
+        </md-button>
       </div>
     </md-toolbar>
   </md-content>
@@ -21,8 +26,7 @@
 
   <md-button ng-click="mainCtrl.showAddStopDialog($event)" class="md-fab add-city-button md-warn" md-warn
              aria-label="Add City">
-    <md-icon icon="ic_add_24px.svg" style="width: 24px; height: 24px;">
-    </md-icon>
+    <md-icon icon="ic_add_24px.svg" style="width: 24px; height: 24px;"></md-icon>
     <md-tooltip>
       Add City
     </md-tooltip>
