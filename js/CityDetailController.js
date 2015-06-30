@@ -16,14 +16,10 @@
  * @constructor
  * @param {GooglePlacesService} GooglePlacesService
  */
-function CityDetailController($scope, $stateParams, $firebase, GooglePlacesService) {
+function CityDetailController($scope, $stateParams, $firebase, GooglePlacesService, $firebaseObject) {
   this.cityId = $stateParams;
 
   var ref = new Firebase('https://journey-planner-1.firebaseio.com/journeys/' + $stateParams.cityId);
-  /**
-   * @type {AngularFire|Array}
-   */
-  var _fb = $firebase(ref);
 
   /**
    * @type {boolean}
@@ -39,7 +35,7 @@ function CityDetailController($scope, $stateParams, $firebase, GooglePlacesServi
    * The datastore database to FireBase
    * @type {Array}
    */
-  this.city = _fb.$asObject();
+  this.city = $firebaseObject(ref);
 
   /**
    * @type {Array.<DisplayHotel>}

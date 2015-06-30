@@ -5,7 +5,7 @@
  * @param $firebase
  * @constructor
  */
-function MapController($scope, $mdDialog, $mdSidenav, $firebase, uiGmapGoogleMapApi, uiGmapIsReady, uiGmapLogger, $timeout, $mdToast) {
+function MapController($scope, $mdDialog, $mdSidenav, $firebase, uiGmapGoogleMapApi, uiGmapIsReady, uiGmapLogger, $timeout, $mdToast, $firebaseArray) {
   uiGmapLogger.doLog = true;
   uiGmapLogger.currentLevel = 1;
 
@@ -14,17 +14,13 @@ function MapController($scope, $mdDialog, $mdSidenav, $firebase, uiGmapGoogleMap
    * @type {Firebase}
    */
   var ref = new Firebase('https://journey-planner-1.firebaseio.com/journeys');
-  /**
-   * @type {AngularFire|Array}
-   */
-  var _fb = $firebase(ref);
 
 
   /**
    * The datastore database to FireBase
    * @type {Array.<FBCity>}
    */
-  this._cities = _fb.$asArray();
+  this._cities = $firebaseArray(ref);
 
   /**
    * @type {boolean}

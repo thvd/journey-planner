@@ -1,9 +1,12 @@
 <md-dialog>
   <form>
-    <md-content>
+    <md-dialog-content>
       <h1>Add new city</h1>
-      <md-text-float ng-model="ctrl.stopName" label="Stop Name"></md-text-float>
-    </md-content>
+      <md-input-container>
+        <label>Stop name</label>
+        <input ng-model="ctrl.stopName">
+      </md-input-container>
+    </md-dialog-content>
 
     <div class="md-actions">
       <md-button ng-click="ctrl.cancelDialog()" aria-label="Cancel dialog"> Cancel </md-button>

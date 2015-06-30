@@ -1,17 +1,13 @@
-function RouteDetailsController($scope, $firebase, $mdSidenav) {
+function RouteDetailsController($scope, $firebase, $mdSidenav, $firebaseArray) {
 
   var ref = new Firebase('https://journey-planner-1.firebaseio.com/journeys');
-  /**
-   * @type {AngularFire|Array}
-   */
-  var _fb = $firebase(ref);
 
 
   /**
    * The datastore database to FireBase
    * @type {Array}
    */
-  this._cities = _fb.$asArray();
+  this._cities = $firebaseArray(ref);
 
   this.openNav = function() {
     $mdSidenav('left').open();

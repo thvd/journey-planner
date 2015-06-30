@@ -7,10 +7,9 @@
 
   <title>Journey planner app</title>
 
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <!-- build:css -->
   <link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
-  <link rel="stylesheet" href="bower_components/material-design-icons/sprites/svg-sprite/svg-sprite-navigation.css">
-  <link rel="stylesheet" href="bower_components/material-design-icons/sprites/svg-sprite/svg-sprite-maps.css">
   <link rel="stylesheet" href="css/style.css">
   <!-- endbuild -->
 </head>
@@ -18,12 +17,14 @@
 <div layout="column" layout-fill>
   <section layout="row" flex>
     <div ng-controller="NavigationDrawerController as navCtrl">
-      <md-sidenav class="md-whiteframe-z2 md-sidenav-left" md-component-id="left" md-is-locked-open="$media('gt-sm')">
+      <md-sidenav class="md-whiteframe-z2 md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')">
         <md-toolbar class="md-theme-indigo">
           <div class="md-toolbar-tools">
             <md-button hide-gt-sm ng-click="navCtrl.close()"
-                       class="md-primary svg-ic_arrow_back_24px svg-ic_arrow_back_24px-dims"
-                       aria-label="Close nav menu"></md-button>
+                       class="md-primary"
+                       aria-label="Close nav menu">
+              <md-icon>arrow_back</md-icon>
+            </md-button>
             <h1>My Sidenav Left</h1>
           </div>
         </md-toolbar>
@@ -31,7 +32,7 @@
           <md-list>
             <md-item>
               <md-item-content>
-                <div class="md-tile-left svg-ic_map_24px svg-ic_map_24px-dims"></div>
+                <div class="md-tile-left"></div>
                 <div class="md-tile-content">
                   <a ui-sref="map"><h3>Map</h3></a>
                 </div>
@@ -40,7 +41,7 @@
             <md-item>
               <md-item-content>
                 <md-button block aria-label="Details">
-                  <div class="md-tile-left svg-ic_map_24px svg-ic_map_24px-dims"></div>
+                  <div class="md-tile-left"></div>
                   <div class="md-tile-content">
                     <a ui-sref="cities"><h3>Details</h3></a>
                   </div>
@@ -62,12 +63,11 @@
 
 <!-- build:js -->
 
-<script src="bower_components/lodash/dist/lodash.js"></script>
+<script src="bower_components/lodash/lodash.js"></script>
 
 <script src="bower_components/angular/angular.js"></script>
 <script src="bower_components/angular-aria/angular-aria.js"></script>
 <script src="bower_components/angular-animate/angular-animate.js"></script>
-<script src="bower_components/hammerjs/hammer.js"></script>
 <script src="bower_components/angular-material/angular-material.js"></script>
 <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 <script src="bower_components/angular-google-maps/dist/angular-google-maps.js"></script>

@@ -36,11 +36,10 @@ gulp.task('new:js', function () {
   var sources = [];
   if (ENV === DEV) {
     sources = [
-      'bower_components/lodash/dist/lodash.js',
+      'bower_components/lodash/lodash.js',
       'bower_components/angular/angular.js',
       'bower_components/angular-aria/angular-aria.js',
       'bower_components/angular-animate/angular-animate.js',
-      'bower_components/hammerjs/hammer.js',
       'bower_components/angular-material/angular-material.js',
       'bower_components/angular-ui-router/release/angular-ui-router.js',
       'bower_components/angular-google-maps/dist/angular-google-maps.js',
@@ -50,11 +49,10 @@ gulp.task('new:js', function () {
     ];
   } else if (ENV === PROD) {
     sources = [
-      'bower_components/lodash/dist/lodash.min.js',
+      'bower_components/lodash/lodash.min.js',
       'bower_components/angular/angular.min.js',
       'bower_components/angular-aria/angular-aria.min.js',
       'bower_components/angular-animate/angular-animate.min.js',
-      'bower_components/hammerjs/hammer.min.js',
       'bower_components/angular-material/angular-material.min.js',
       'bower_components/angular-ui-router/release/angular-ui-router.min.js',
       'bower_components/angular-google-maps/dist/angular-google-maps.min.js',
@@ -127,17 +125,7 @@ gulp.task('connect', function () {
   });
 });
 
-gulp.task('copy:angular-material-svg-sprites', function () {
-  return gulp.src([
-    'bower_components/material-design-icons/sprites/svg-sprite/*.svg',
-    'bower_components/material-design-icons/content/svg/production/*.svg',
-    'bower_components/material-design-icons/action/svg/production/*.svg'
-  ])
-      .pipe(gulp.dest(buildDir))
-      .on('error', gutil.log);
-});
-
-gulp.task('build', ['js', 'html', 'html:partials', 'css', 'copy:angular-material-svg-sprites']);
+gulp.task('build', ['js', 'html', 'html:partials', 'css']);
 
 gulp.task('watch', ['build'], function () {
   gulp.watch([allJsSources], ['js']);
