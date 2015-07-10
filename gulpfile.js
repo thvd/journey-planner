@@ -7,14 +7,13 @@ var ngAnnotate = require('gulp-ng-annotate');
 var size = require('gulp-size');
 var connect = require('gulp-connect');
 var replace = require('gulp-replace');
-var fs = require('fs');
 var htmlreplace = require('gulp-html-replace');
 var minifyCSS = require('gulp-minify-css');
 var gulpif = require('gulp-if');
 
 var config = require('./.config.json');
 
-
+const GOOGLE_API_KEY = config['google_api_key'];
 const PROD = 'prod';
 const DEV = 'dev';
 const ENV = getEnv();
@@ -67,7 +66,7 @@ gulp.task('new:js', function () {
   return gulp.src(sources, {base: '.'})
       .pipe(size({showFiles: true, title: 'js: not minimized'}))
       .pipe(sourcemaps.init({loadMaps: true, debug: true}))
-      .pipe(replace('GOOGLE_API_KEY', config.google_api_key))
+      .pipe(replace('GOOGLE_API_KEY', GOOGLE_API_KEY))
       .pipe(gulpif(ENV === PROD, concat('build.js')))
       .pipe(gulpif(ENV === PROD, ngAnnotate()))
       .pipe(gulpif(ENV === PROD, uglify()))
@@ -78,9 +77,9 @@ gulp.task('new:js', function () {
       .on('error', gutil.log);
 });
 
-gulp.task('html', function (cb) {
+gulp.task('html', function () {
   return gulp.src([allHtmlSources])
-      .pipe(replace('GOOGLE_API_KEY', config.google_api_key))
+      .pipe(replace('GOOGLE_API_KEY', GOOGLE_API_KEY))
       .pipe(gulpif(ENV === PROD, htmlreplace({
         'css': 'build.css',
         'js': 'build.js'
@@ -102,9 +101,6 @@ gulp.task('html:partials', function () {
 gulp.task('css', function () {
   return gulp.src([
     'node_modules/angular-material/angular-material.css',
-    'node_modules/material-design-icons/sprites/svg-sprite/svg-sprite-navigation.css',
-    'node_modules/material-design-icons/sprites/svg-sprite/svg-sprite-maps.css',
-    'node_modules/material-design-icons/sprites/svg-sprite/svg-sprite-action.css',
     allCssSources
   ])
       .pipe(size({showFiles: true, title: 'css: not minimized'}))
