@@ -33,5 +33,13 @@
     "gulp-html-replace": "~1.5.1",
     "gulp-minify-css": "~1.2.0",
     "gulp-if": "~1.2.5"
+  },
+  "dependencies": {
+    "angular": "~1.4.0",
+    "angular-google-maps": "~2.0.9",
+    "angular-material": "~0.10.0",
+    "angular-ui-router": "~0.2.12",
+    "angularfire": "~1.1.2",
+    "lodash": "^3.10.0"
   }
 }
