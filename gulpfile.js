@@ -11,9 +11,19 @@ var htmlreplace = require('gulp-html-replace');
 var minifyCSS = require('gulp-minify-css');
 var gulpif = require('gulp-if');
 
-var config = require('./.config.json');
+var _GOOGLE_API_KEY;
 
-const GOOGLE_API_KEY = config['google_api_key'];
+if (process.env['npm_config_google_api_key']) {
+  _GOOGLE_API_KEY = process.env['npm_config_google_api_key'];
+} else {
+  var config = require('./.config.json');
+
+  _GOOGLE_API_KEY = config['google_api_key'];
+}
+
+const GOOGLE_API_KEY = _GOOGLE_API_KEY;
+
+
 const PROD = 'prod';
 const DEV = 'dev';
 const ENV = getEnv();
