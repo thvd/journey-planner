@@ -4,7 +4,8 @@
   "description": "Journey Planner App. Made using Angular and Angular-Material.",
   "main": "index.html",
   "scripts": {
-    "heroku_deploy": "git push heroku master"
+    "heroku_deploy": "git push heroku master",
+    "postinstall": "./node_modules/.bin/gulp build"
   },
   "repository": {
     "type": "git",
