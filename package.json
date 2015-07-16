@@ -4,7 +4,7 @@
   "description": "Journey Planner App. Made using Angular and Angular-Material.",
   "main": "index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "heroku_deploy": "git push heroku master"
   },
   "repository": {
     "type": "git",
@@ -40,9 +40,7 @@
     "angular-material": "~0.10.0",
     "angular-ui-router": "~0.2.12",
     "angularfire": "~1.1.2",
+    "http-server": "^0.8.0",
     "lodash": "^3.10.0"
-  },
-  "scripts": {
-    "heroku_deploy": "git push heroku master"
   }
 }
