@@ -5,7 +5,7 @@
   "main": "index.html",
   "scripts": {
     "heroku_deploy": "git push heroku master",
-    "postinstall": "./node_modules/.bin/gulp build"
+    "postinstall": "node_modules/.bin/gulp build"
   },
   "repository": {
     "type": "git",
