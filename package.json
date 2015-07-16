@@ -43,5 +43,8 @@
     "angularfire": "~1.1.2",
     "http-server": "^0.8.0",
     "lodash": "^3.10.0"
+  },
+  "engines": {
+    "node": "0.12.x"
   }
 }
