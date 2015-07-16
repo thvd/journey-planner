@@ -41,5 +41,8 @@
     "angular-ui-router": "~0.2.12",
     "angularfire": "~1.1.2",
     "lodash": "^3.10.0"
+  },
+  "scripts": {
+    "heroku_deploy": "git push heroku master"
   }
 }
