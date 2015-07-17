@@ -29,6 +29,8 @@ const PROD = 'production';
 const DEV = 'development';
 const ENV = getEnv();
 
+console.log('Build environment: ' + ENV);
+
 var allJsSources = 'js/**/*.js';
 var allCssSources = 'css/**/*.css';
 var allHtmlSources = 'index.html';
