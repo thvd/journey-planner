@@ -55,7 +55,7 @@ gulp.task('new:js', function () {
       'node_modules/angular-material/angular-material.js',
       'node_modules/angular-ui-router/release/angular-ui-router.js',
       'node_modules/angular-google-maps/dist/angular-google-maps.js',
-      'node_modules/angularfire/node_modules/firebase/lib/firebase-web.js',
+      //'node_modules/angularfire/node_modules/firebase/lib/firebase-web.js',
       'node_modules/angularfire/dist/angularfire.js',
       allJsSources
     ];
@@ -68,7 +68,7 @@ gulp.task('new:js', function () {
       'node_modules/angular-material/angular-material.min.js',
       'node_modules/angular-ui-router/release/angular-ui-router.min.js',
       'node_modules/angular-google-maps/dist/angular-google-maps.min.js',
-      'node_modules/angularfire/node_modules/firebase/lib/firebase-web.js',
+      //'node_modules/angularfire/node_modules/firebase/lib/firebase-web.js',
       'node_modules/angularfire/dist/angularfire.min.js',
       allJsSources
     ];
