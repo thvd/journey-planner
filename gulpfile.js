@@ -159,7 +159,7 @@ gulp.task('file-size:build-css', function () {
 
 
 function getEnv() {
-  if (_.isUndefined(argv.build)) {
+  if (undefined === argv.build) {
     return process.env.BUILD_ENV === PROD ? PROD : DEV;
   } else {
     return argv.build === PROD ? PROD : DEV;
