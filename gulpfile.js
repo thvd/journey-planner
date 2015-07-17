@@ -10,6 +10,7 @@ var replace = require('gulp-replace');
 var htmlreplace = require('gulp-html-replace');
 var minifyCSS = require('gulp-minify-css');
 var gulpif = require('gulp-if');
+var argv = require('yargs').argv;
 
 var _GOOGLE_API_KEY;
 
@@ -24,8 +25,8 @@ if (process.env['npm_config_google_api_key']) {
 const GOOGLE_API_KEY = _GOOGLE_API_KEY;
 
 
-const PROD = 'prod';
-const DEV = 'dev';
+const PROD = 'production';
+const DEV = 'development';
 const ENV = getEnv();
 
 var allJsSources = 'js/**/*.js';
@@ -158,5 +159,10 @@ gulp.task('file-size:build-css', function () {
 
 
 function getEnv() {
-  return gulp.env.build === PROD ? PROD : DEV;
+  if (_.isUndefined(argv.build)) {
+    return process.env.BUILD_ENV === PROD ? PROD : DEV;
+  } else {
+    return argv.build === PROD ? PROD : DEV;
+  }
+
 }
