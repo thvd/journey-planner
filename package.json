@@ -42,7 +42,7 @@
     "angular-ui-router": "~0.2.12",
     "angularfire": "~1.1.2",
     "http-server": "^0.8.0",
-    "lodash": "^3.10.0"
+    "lodash": "^4.17.19"
   },
   "engines": {
     "node": "0.12.x"
